@@ -1,0 +1,128 @@
+import arducopter
+import time
+
+def arm_disarm (mavproxy, mav):
+    '''A scripted flight plan'''
+    if (arducopter.calibrate_level(mavproxy, mav) and
+        arducopter.arm_motors(mavproxy, mav) and  
+        arducopter.disarm_motors(mavproxy,mav)):
+        return True
+    return False
+
+def failsafe(mavproxy, mav):
+    '''A scripted flight plan'''
+    if ( 
+        arducopter.calibrate_level(mavproxy, mav) and
+        arducopter.arm_motors(mavproxy, mav) and  
+        arducopter.takeoff(mavproxy,mav, alt_min=80, takeoff_throttle=1510)  and
+        arducopter.hover(mavproxy,mav, hover_throttle=1300) and
+        arducopter.fly_throttle_failsafe(mavproxy, mav, side=80, timeout=120)
+    ):
+        return True
+    return False
+
+def takeoff (mavproxy, mav):
+    '''A scripted flight plan'''
+    if ( 
+        arducopter.calibrate_level(mavproxy, mav) and
+        arducopter.arm_motors(mavproxy, mav) and  
+        arducopter.takeoff(mavproxy,mav, alt_min=30, takeoff_throttle=1510)):
+        return True
+    return False
+
+def guided_test (mavproxy, mav):
+    '''A scripted flight plan'''
+    wps = [
+        [45.22298, 5.690054], 
+        [45.223,   5.690031],
+        [45.22308, 5.689955],
+        [45.22316, 5.689875],
+        [45.22324, 5.689797],
+        [45.22331, 5.68972],
+        [45.22338, 5.68964],
+        [45.22344, 5.689583],
+        [45.22351, 5.689513],
+        [45.22359, 5.689423],
+        [45.22365, 5.689343],
+        [45.22372, 5.689287],
+        [45.22379, 5.689219],
+        [45.22383, 5.689182],
+        [45.22383, 5.689187],
+        [45.22383, 5.689188],
+        [45.22382, 5.6892],
+        [45.22378, 5.689222],
+        [45.22371, 5.689301],
+        [45.22364, 5.689387],
+        [45.22356, 5.689456],
+        [45.2235,  5.68953],
+        [45.22344, 5.6896],
+        [45.22337, 5.689683],
+        [45.22332, 5.689734],
+        [45.22324, 5.689822],
+        [45.22317, 5.689898],
+        [45.22311, 5.68997],
+        [45.22306, 5.690037],
+        [45.22299, 5.690111],
+        [45.2229,  5.690189],
+        [45.22282, 5.69026],
+        [45.22275, 5.690337],
+        [45.22268, 5.690403],
+        [45.22261, 5.690464],
+        [45.22259, 5.690482],
+        [45.2226,  5.690475],
+        [45.2226,  5.690466],
+        [45.2226,  5.690466],
+        [45.22262, 5.69045],
+        [45.22268, 5.690374],
+        [45.22276, 5.690294],
+        [45.22284, 5.690213],
+        [45.2229,  5.690146],
+        [45.22293, 5.690103],
+        ]
+ 
+
+    if ( 
+        arducopter.calibrate_level(mavproxy, mav) and
+        arducopter.arm_motors(mavproxy, mav) and  
+        arducopter.takeoff(mavproxy,mav, alt_min=10, takeoff_throttle=1510) and
+        arducopter.set_guided_mode(mavproxy,mav)):
+        
+            #arducopter.param_set (mavproxy, mav, "WPNAV_SPEED" , 700)
+            #i = 0 ; 
+            for wp in wps:
+                arducopter.goto_guided_point(mavproxy, mav, lat=wp[0], lng=wp[1], alt=10, freq=2) 
+                #i += 1 
+                #if (i >= 20):
+                    #arducopter.param_set (mavproxy, mav, "WPNAV_SPEED" , 200)
+            return True
+        
+        #arducopter.goto_guided_point(mavproxy, mav, lat=wp1[0], lng=wp1[1], alt=20, freq=30) and
+        #arducopter.goto_guided_point(mavproxy, mav, lat=wp2[0], lng=wp2[1], alt=20, freq=5) and
+        #arducopter.goto_guided_point(mavproxy, mav, lat=wp3[0], lng=wp3[1], alt=20, freq=5) and
+        #arducopter.goto_guided_point(mavproxy, mav, lat=wp4[0], lng=wp4[1], alt=20, freq=30)):
+        #arducopter.goto_guided_point(mavproxy, mav, lat=45.222711, lng=5.690787, alt=20, freq=10) and
+        #arducopter.goto_guided_point(mavproxy, mav, lat=45.27, lng=5.68, alt=20, freq=10)):
+   
+    return False
+
+def straight_line_1point (mavproxy, mav):
+    '''Straight line with only one point'''
+    arducopter.param_set (mavproxy, mav, "WPNAV_ACCEL" , 150)
+    arducopter.param_set (mavproxy, mav, "WP_YAW_BEHAVIOR" , 0)
+    if ( 
+        arducopter.calibrate_level(mavproxy, mav) and
+        arducopter.arm_motors(mavproxy, mav) and  
+        arducopter.takeoff(mavproxy,mav, alt_min=10, takeoff_throttle=1510) and
+        arducopter.set_guided_mode(mavproxy,mav)):
+
+            
+            mavproxy.send('guided ' + str(45.2262611111) + ' ' + str(5.6936361111) + ' ' + str(10) + '\n')
+#            mavproxy.send('guided ' + str(45.2230555556) + ' ' + str(5.6900944444) + ' ' + str(10) + '\n')
+            mavproxy.send('speed ' + str(7.0) + '\n')
+            arducopter.wait(mav, 40)
+#            mavproxy.send('guided ' + str(45.2262611111) + ' ' + str(5.6936361111) + ' ' + str(10) + '\n')
+#            mavproxy.send('speed ' + str(2.0) + '\n')
+#            arducopter.wait(mav, 30)
+
+    return True
+
