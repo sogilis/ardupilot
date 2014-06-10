@@ -79,10 +79,6 @@ def wait(mav, duration):
         print("Air speed: " + str(vfr_hud_msg.airspeed) + " - Ground speed: "+ str(vfr_hud_msg.groundspeed))
     return True
 
-def param_set (mavproxy, mav, param, value):
-    mavproxy.send('param set ' + str(param) + ' ' + str(value) + ' \n')
-    return True
-
 def set_guided_mode(mavproxy, mav):
     print("Switch to GUIDED Mode")
     mavproxy.send('mode GUIDED\n') # Guided mode

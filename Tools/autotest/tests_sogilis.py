@@ -105,10 +105,16 @@ def guided_test (mavproxy, mav):
    
     return False
 
-def straight_line_1point (mavproxy, mav):
-    '''Straight line with only one point'''
-    arducopter.param_set (mavproxy, mav, "WPNAV_ACCEL" , 150)
-    arducopter.param_set (mavproxy, mav, "WP_YAW_BEHAVIOR" , 0)
+
+def change_speed (mavproxy, mav):
+    result = True
+    speed = 7.0
+    max_speed = speed + 0.5
+    min_speed = speed - 1.0
+    '''Change speed'''
+    mavproxy.send("param set WPNAV_ACCEL 150\n")
+    mavproxy.send("param set WP_YAW_BEHAVIOR 0\n")
+    
     if ( 
         arducopter.calibrate_level(mavproxy, mav) and
         arducopter.arm_motors(mavproxy, mav) and  
@@ -117,12 +123,19 @@ def straight_line_1point (mavproxy, mav):
 
             
             mavproxy.send('guided ' + str(45.2262611111) + ' ' + str(5.6936361111) + ' ' + str(10) + '\n')
-#            mavproxy.send('guided ' + str(45.2230555556) + ' ' + str(5.6900944444) + ' ' + str(10) + '\n')
-            mavproxy.send('speed ' + str(7.0) + '\n')
-            arducopter.wait(mav, 40)
-#            mavproxy.send('guided ' + str(45.2262611111) + ' ' + str(5.6936361111) + ' ' + str(10) + '\n')
-#            mavproxy.send('speed ' + str(2.0) + '\n')
-#            arducopter.wait(mav, 30)
-
-    return True
+            mavproxy.send('speed ' + str(speed) + '\n')
+            
+            tstart = time.time()
+            print("\nWait 10s for Acceleration")
+            while time.time() < tstart + 10:
+                vfr_hud_msg  = mav.recv_match(type='VFR_HUD' , blocking=True)
+            
+            tstart = time.time()
+            print("\nCheck speed between " + str(min_speed) + " and " + str(max_speed) + " during 30s\n")
+            while time.time() < tstart + 30:
+                vfr_hud_msg  = mav.recv_match(type='VFR_HUD' , blocking=True)
+                result = result and (vfr_hud_msg.airspeed < max_speed) and (vfr_hud_msg.airspeed > min_speed)
+                print("Speed: " + str(vfr_hud_msg.airspeed))
+                
+    return result
 

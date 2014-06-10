@@ -24,7 +24,7 @@ tests = [
     'failsafe',
     'takeoff',
     'guided_test',
-    'straight_line1',
+    'change_speed',
     ]
 
 
@@ -128,9 +128,9 @@ try:
             res = tests_sogilis.guided_test(mavproxy,mav)
             display("guided_test", res) 
 
-        if "straight_line1" in matched :
-            res = tests_sogilis.straight_line_1point(mavproxy,mav)
-            display("straight_line1", res)
+        if "change_speed" in matched :
+            res = tests_sogilis.change_speed(mavproxy,mav)
+            display("change_speed", res)
 
 except pexpect.TIMEOUT, failed_test_msg:
         failed_test_msg = "Timeout"
