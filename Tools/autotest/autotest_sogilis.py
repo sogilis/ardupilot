@@ -25,6 +25,7 @@ tests = [
     'takeoff',
     'guided_test',
     'change_speed',
+    'change_speed2'
     ]
 
 
@@ -131,6 +132,10 @@ try:
         if "change_speed" in matched :
             res = tests_sogilis.change_speed(mavproxy,mav)
             display("change_speed", res)
+
+        if "change_speed2" in matched :
+            res = tests_sogilis.change_speed2(mavproxy,mav)
+            display("change speed with 2 thresholds", res)
 
 except pexpect.TIMEOUT, failed_test_msg:
         failed_test_msg = "Timeout"

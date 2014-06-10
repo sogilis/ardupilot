@@ -17,8 +17,8 @@ testdir=os.path.dirname(os.path.realpath(__file__))
 
 FRAME='+'
 TARGET='sitl'
-HOME=mavutil.location(-35.362938,149.165085,584,270)
-AVCHOME=mavutil.location(40.072842,-105.230575,1586,0)
+HOME=mavutil.location(45.2227,5.6897027778,10,270)
+AVCHOME=mavutil.location(45.2227,5.6897027778,10,270)
 
 homeloc = None
 num_wp = 0
