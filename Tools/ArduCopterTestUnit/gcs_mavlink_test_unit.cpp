@@ -148,7 +148,7 @@ class Fixture {
 
 public:
 	GCS_MAVLINK       sut;
-	uint8_t 		  tab[4] = {0};
+	uint8_t 		  tab[4];
 
 	void setup (float initial_speed_in_cm_per_s) {
 		reset();
@@ -192,26 +192,15 @@ public:
 
 };
 
-TEST_CASE("No Change Case", "COMMAND_LONG | DO_CHANGE_SPEED") {
-	Fixture fixture;
-	fixture.tab[0] = 0x00;
-	fixture.tab[1] = 0x00;
-	fixture.tab[2] = 0x80;
-	fixture.tab[3] = 0xBF;		//-1.0 in m/s
-	fixture.setup(675.0);
-	fixture.exercize();
-	fixture.check(675.0, 0);	// Command is Accepted and Executed - Speed Value Is Not Changed
-}
-
 TEST_CASE("Invalid Case", "COMMAND_LONG | DO_CHANGE_SPEED") {
 	Fixture fixture;
 	fixture.tab[0] = 0x00;
 	fixture.tab[1] = 0x00;
-	fixture.tab[2] = 0x00;
+	fixture.tab[2] = 0x40;
 	fixture.tab[3] = 0xC0;		//-3.0 in m/s
 	fixture.setup(3.0);
 	fixture.exercize();
-	fixture.check(3.0, 1);		// Command is Not Accepted - Speed Value Is Not Changed
+	fixture.check(3.0, 4);		// Command failed - Speed Value Is Not Changed
 }
 
 TEST_CASE("Nominal Case", "COMMAND_LONG | DO_CHANGE_SPEED") {

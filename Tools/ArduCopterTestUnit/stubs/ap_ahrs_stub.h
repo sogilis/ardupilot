@@ -1,8 +1,11 @@
 #ifndef AP_AHRS_STUB_H_
 #define AP_AHRS_STUB_H_
 
+#include "util.h"
+
 class AP_AHRS {
 	Vector3f gyro_drift;
+    struct Location _home;
 public:
 	float roll;
 	float pitch;
@@ -15,6 +18,7 @@ public:
     float get_error_rp(void) {return 0.0;}
     float get_error_yaw(void) {return 0.0;}
     void  set_trim(Vector3f new_trim) {}
+    const struct Location &get_home(void) const {return _home;}
 
 };//AP_AHRS
 
