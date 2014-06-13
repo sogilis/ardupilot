@@ -196,8 +196,8 @@ def change_speed2 (mavproxy, mav):
 def change_yaw (mavproxy, mav):
     result = True
     angle = 180
-    angle_min = 175
-    angle_max = 185
+    angle_min = 178
+    angle_max = 182
     mavproxy.send("param set WP_YAW_BEHAVIOR 0\n")
     
     if ( 
@@ -207,7 +207,7 @@ def change_yaw (mavproxy, mav):
         arducopter.set_guided_mode(mavproxy,mav)):
             
             mavproxy.send('guided ' + str(45.2227) + ' ' + str(5.6962055556) + ' ' + str(10) + '\n')
-            mavproxy.send('yaw ' + str(angle) + str(45.0) + str(0) + '\n')
+            mavproxy.send('yaw ' + str(angle)  + ' ' + str(45.0) + ' ' + str(0) + '\n')
             
             tstart = time.time()
             print("\nWait 10s for rotation")
@@ -216,11 +216,57 @@ def change_yaw (mavproxy, mav):
                 print("Heading: " + str(vfr_hud_msg.heading))
             
             tstart = time.time()
-            print("\nCheck speed between " + str(angle_min) + " and " + str(angle_max) + " during 30s\n")
+            print("\nCheck heading between " + str(angle_min) + " and " + str(angle_max) + " during 30s\n")
             while time.time() < tstart + 30:
                 vfr_hud_msg  = mav.recv_match(type='VFR_HUD' , blocking=True)
                 result = result and (vfr_hud_msg.heading < angle_max) and (vfr_hud_msg.heading > angle_min)
                 print("Heading: " + str(vfr_hud_msg.heading))
                 
     return result
+
+    
+def change_yaw2 (mavproxy, mav):
+    result = True
+    angle_absolute = 45
+    angle_relative = 180
+    mavproxy.send("param set WP_YAW_BEHAVIOR 0\n")
+    
+    if ( 
+        arducopter.calibrate_level(mavproxy, mav) and
+        arducopter.arm_motors(mavproxy, mav) and  
+        arducopter.takeoff(mavproxy,mav, alt_min=10, takeoff_throttle=1510) and
+        arducopter.set_guided_mode(mavproxy,mav)):
+            
+            mavproxy.send('guided ' + str(45.2179944444) + ' ' + str(5.6897027778) + ' ' + str(10) + '\n')
+            mavproxy.send('yaw ' + str(angle_absolute)  + ' ' + str(45.0) + ' ' + str(0) + '\n')
+            
+            tstart = time.time()
+            print("\nWait 10s for rotation heading = 45°")
+            while time.time() < tstart + 10:
+                vfr_hud_msg  = mav.recv_match(type='VFR_HUD' , blocking=True)
+                print("Heading: " + str(vfr_hud_msg.heading))
+            
+            tstart = time.time()
+            print("\nCheck heading between " + str(43) + " and " + str(47) + " during 15s\n")
+            while time.time() < tstart + 15:
+                vfr_hud_msg  = mav.recv_match(type='VFR_HUD' , blocking=True)
+                result = result and (vfr_hud_msg.heading > 43) and (vfr_hud_msg.heading < 47)
+                print("Heading: " + str(vfr_hud_msg.heading))
+                
+            mavproxy.send('yaw ' + str(angle_relative)  + ' ' + str(45.0) + ' ' + str(1) + '\n')
+            tstart = time.time()
+            print("\nWait 10s for rotation (180° relative)")
+            while time.time() < tstart + 10:
+                vfr_hud_msg  = mav.recv_match(type='VFR_HUD' , blocking=True)
+                print("Heading: " + str(vfr_hud_msg.heading))
+            
+            tstart = time.time()
+            print("\nCheck heading between " + str(223) + " and " + str(227) + " during 15s\n")
+            while time.time() < tstart + 15:
+                vfr_hud_msg  = mav.recv_match(type='VFR_HUD' , blocking=True)
+                result = result and (vfr_hud_msg.heading > 223) and (vfr_hud_msg.heading < 227)
+                print("Heading: " + str(vfr_hud_msg.heading))
+                
+     return result
+
 
