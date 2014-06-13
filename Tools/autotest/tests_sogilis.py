@@ -227,8 +227,8 @@ def change_yaw (mavproxy, mav):
     
 def change_yaw2 (mavproxy, mav):
     result = True
-    angle_absolute = 45
-    angle_relative = 180
+    angle_1 = 45
+    angle_2 = 225
     mavproxy.send("param set WP_YAW_BEHAVIOR 0\n")
     
     if ( 
@@ -238,10 +238,10 @@ def change_yaw2 (mavproxy, mav):
         arducopter.set_guided_mode(mavproxy,mav)):
             
             mavproxy.send('guided ' + str(45.2179944444) + ' ' + str(5.6897027778) + ' ' + str(10) + '\n')
-            mavproxy.send('yaw ' + str(angle_absolute)  + ' ' + str(45.0) + ' ' + str(0) + '\n')
+            mavproxy.send('yaw ' + str(angle_1)  + ' ' + str(45.0) + ' ' + str(0) + '\n')
             
             tstart = time.time()
-            print("\nWait 10s for rotation heading = 45°")
+            print("\nWait 10s for rotation heading = 45")
             while time.time() < tstart + 10:
                 vfr_hud_msg  = mav.recv_match(type='VFR_HUD' , blocking=True)
                 print("Heading: " + str(vfr_hud_msg.heading))
@@ -253,9 +253,9 @@ def change_yaw2 (mavproxy, mav):
                 result = result and (vfr_hud_msg.heading > 43) and (vfr_hud_msg.heading < 47)
                 print("Heading: " + str(vfr_hud_msg.heading))
                 
-            mavproxy.send('yaw ' + str(angle_relative)  + ' ' + str(45.0) + ' ' + str(1) + '\n')
+            mavproxy.send('yaw ' + str(angle_2)  + ' ' + str(45.0) + ' ' + str(0) + '\n')
             tstart = time.time()
-            print("\nWait 10s for rotation (180° relative)")
+            print("\nWait 10s for rotation heading = 225")
             while time.time() < tstart + 10:
                 vfr_hud_msg  = mav.recv_match(type='VFR_HUD' , blocking=True)
                 print("Heading: " + str(vfr_hud_msg.heading))
@@ -267,6 +267,6 @@ def change_yaw2 (mavproxy, mav):
                 result = result and (vfr_hud_msg.heading > 223) and (vfr_hud_msg.heading < 227)
                 print("Heading: " + str(vfr_hud_msg.heading))
                 
-     return result
+    return result
 
 
