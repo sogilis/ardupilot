@@ -49,6 +49,7 @@ void check_usb_mux(void) {} ;
 static bool do_guided(const AP_Mission::Mission_Command& cmd) {return true;}
 // Stubbed method
 static void set_auto_yaw_look_at_heading(float angle_deg, float turn_rate_dps, uint8_t relative_angle); // control_auto
+static void do_takeoff(const AP_Mission::Mission_Command& cmd);
 
 
 // Variables Stubs
@@ -109,6 +110,14 @@ public:
 };//Control_Auto_Stub
 static Control_Auto_Stub control_auto_stub;
 
+class Take_Off_Stub {
+public:
+	bool has_been_called;
+	AP_Mission::Mission_Command cmd;
+	uint8_t mode;
+};//Take_Off_Stub
+static Take_Off_Stub take_Off_Stub;
+
 static union {
     struct {
         uint8_t home_is_set         : 1; // 0
@@ -156,6 +165,10 @@ static void set_auto_yaw_look_at_heading(float angle_deg, float turn_rate_dps, u
 	control_auto_stub.turn_rate_dps  = turn_rate_dps;
 	control_auto_stub.relative_angle = relative_angle;
 }//set_auto_yaw_look_at_heading
+
+static void do_takeoff(const AP_Mission::Mission_Command& cmd) {
+	take_Off_Stub.has_been_called = true;
+}//do_takeoff
 
 
 class Fixture {
@@ -240,6 +253,32 @@ public:
 
 	}//setup_yaw_test
 
+	void setup_take_off_test () {
+		reset();
+		uint16_t unused_checksum = 0;
+		uint8_t  unused_protocol_magic = 0;
+		uint8_t  unused_payload_lenght = 0;
+		uint8_t  unused_sequence = 0;
+		uint8_t  unused_sysid = 0;
+		uint8_t  unused_compid = 0;
+		uint8_t  command_long_msg_ig = 0x4C;
+		msg =
+		{
+				unused_checksum,
+				unused_protocol_magic,
+				unused_payload_lenght,
+				unused_sequence,
+				unused_sysid,
+				unused_compid,
+				command_long_msg_ig, {}
+		};
+		uint8_t* payload_ptr = (uint8_t*) msg.payload64;
+		payload_ptr [28] = 0x16;    // Command = 22  for TAKEOFF
+		payload_ptr [29] = 0x00;
+		// Parameters
+
+	}//setup_take_off_test
+
 	void exercize (void) {
 		sut.handleMessage(&msg);
 	}//exercize
@@ -259,6 +298,15 @@ public:
 		REQUIRE (control_auto_stub.turn_rate_dps  == turn_rate_dps);
 		REQUIRE (control_auto_stub.relative_angle == relative_angle);
 	}//check_speed_test
+
+	void check_take_off_test (uint8_t status; uint8_t altitude) {
+		REQUIRE (get_result(6)                    == 0x16);  	     // Check Mav Cmd = 22 (TAKE_OFF)
+		REQUIRE (get_result(7)                    == 0);
+		REQUIRE (get_result(8)                    == status);   	 // Accepted and Executed
+		REQUIRE (take_Off_Stub.cmd.location.alt   == 10);   	 // Accepted and Executed
+		REQUIRE (take_Off_Stub.has_been_called);
+		REQUIRE (take_Off_Stub.mode == 4);
+	}//check_take_off_test
 };
 
 TEST_CASE("Speed Invalid Case", "COMMAND_LONG | DO_CHANGE_SPEED") {
@@ -336,5 +384,14 @@ TEST_CASE("Yaw Error Case (Angle mode neither absolute nor relative)", "COMMAND_
 	fixture.setup_yaw_test(270, 1, 2);
 	fixture.exercize();
 	fixture.check_yaw_test(4, 0, 0, 255);	// Command failed - Yaw value remains unchanged
+}
+
+TEST_CASE("Take Off", "COMMAND_LONG | TAKE_OFF") {
+	Fixture fixture;
+	take_Off_Stub.has_been_called = false;
+	take_Off_Stub.mode = 0;
+	fixture.setup_take_off_test();
+	fixture.exercize();
+	fixture.check_take_off_test(0, 10);	// Command is accepted and executed - Take Off is started
 }
 
