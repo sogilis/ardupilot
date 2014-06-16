@@ -1098,6 +1098,20 @@ void GCS_MAVLINK::handleMessage(mavlink_message_t* msg)
             }
             break;
 
+        case MAV_CMD_NAV_TAKEOFF:
+            AP_Mission::Mission_Command cmd;
+            AP_Mission::Content  content;
+            AP_Mission::Location location;
+            location.alt = 10;
+            content.location := location;
+            cmd.content = content;
+            
+            do_takeoff(cmd);
+            if (set_mode(GUIDED)) {
+                result = MAV_RESULT_ACCEPTED;
+            }
+            break;
+
         case MAV_CMD_DO_CHANGE_SPEED:
             // param1 : unused
             // param2 : new speed in m/s
