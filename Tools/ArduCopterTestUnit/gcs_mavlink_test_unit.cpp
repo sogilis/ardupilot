@@ -299,7 +299,7 @@ public:
 		REQUIRE (control_auto_stub.relative_angle == relative_angle);
 	}//check_speed_test
 
-	void check_take_off_test (uint8_t status; uint8_t altitude) {
+	void check_take_off_test (uint8_t status, uint8_t altitude) {
 		REQUIRE (get_result(6)                    == 0x16);  	     // Check Mav Cmd = 22 (TAKE_OFF)
 		REQUIRE (get_result(7)                    == 0);
 		REQUIRE (get_result(8)                    == status);   	 // Accepted and Executed
