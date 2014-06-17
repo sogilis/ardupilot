@@ -168,6 +168,7 @@ static void set_auto_yaw_look_at_heading(float angle_deg, float turn_rate_dps, u
 
 static void do_takeoff(const AP_Mission::Mission_Command& cmd) {
 	take_Off_Stub.has_been_called = true;
+	take_Off_Stub.cmd = cmd;
 }//do_takeoff
 
 
