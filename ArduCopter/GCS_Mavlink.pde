@@ -1101,9 +1101,9 @@ void GCS_MAVLINK::handleMessage(mavlink_message_t* msg)
         case MAV_CMD_NAV_TAKEOFF:
             AP_Mission::Mission_Command cmd;
             AP_Mission::Content  content;
-            AP_Mission::Location location;
+            Location location;
             location.alt = 10;
-            content.location := location;
+            content.location = location;
             cmd.content = content;
             
             do_takeoff(cmd);
