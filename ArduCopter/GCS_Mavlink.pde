@@ -5,6 +5,7 @@
 
 // forward declarations to make compiler happy
 static bool do_guided(const AP_Mission::Mission_Command& cmd);
+static void do_takeoff(const AP_Mission::Mission_Command& cmd);
 
 // use this to prevent recursion during sensor init
 static bool in_mavlink_delay;
