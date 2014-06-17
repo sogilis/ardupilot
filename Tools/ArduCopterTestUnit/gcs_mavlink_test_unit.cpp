@@ -34,7 +34,6 @@ uint16_t comm_get_available(mavlink_channel_t chan) {return 3;}
 uint8_t comm_receive_ch(mavlink_channel_t chan) {return 3;}
 uint16_t comm_get_txspace(mavlink_channel_t chan) {return 32;}
 bool comm_is_idle(mavlink_channel_t chan) {return true;}
-bool set_mode(uint8_t mode) {return true;}
 void run_cli(UARTDriver* port){}
 uint8_t mavlink_check_target(uint8_t sysid, uint8_t compid){return 0;}
 void init_barometer(bool full_calibration) { }
@@ -170,6 +169,11 @@ static void do_takeoff(const AP_Mission::Mission_Command& cmd) {
 	take_Off_Stub.has_been_called = true;
 	take_Off_Stub.cmd = cmd;
 }//do_takeoff
+
+bool set_mode(uint8_t mode) {
+	take_Off_Stub.mode = mode;
+	return true;
+}//set_mode
 
 
 class Fixture {
