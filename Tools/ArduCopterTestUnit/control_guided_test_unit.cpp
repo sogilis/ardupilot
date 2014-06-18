@@ -100,6 +100,7 @@ static void auto_spline_start(const Vector3f& destination, bool stopped_at_start
 static bool GPS_ok() {}
 static float get_pilot_desired_yaw_rate(int16_t stick_angle) {}
 float get_auto_heading(void) {}
+void auto_takeoff_start_factor(float final_alt){};
 
 // Variables Stubs
 
