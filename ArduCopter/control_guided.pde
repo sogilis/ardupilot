@@ -55,6 +55,9 @@ static void guided_run()
 
     case Guided_TakeOff:
         auto_takeoff_run();
+        if (wp_nav.reached_wp_destination()) {
+            guided_mode = Guided_WP;
+        }
         break;
         
     default:
