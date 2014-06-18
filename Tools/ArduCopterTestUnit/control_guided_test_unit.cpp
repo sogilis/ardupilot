@@ -258,3 +258,13 @@ TEST_CASE("Guided Take Off Run", "Take Off - Run in guided mode") {
 	REQUIRE (take_Off_Stub.auto_takeoff_run_has_been_called);
 }
 
+TEST_CASE("Guided Take Off Stop", "Take Off - End") {
+	guided_mode = Guided_TakeOff;
+	wp_nav.waypopint_destination_is_reached = false;
+	guided_run ();
+	REQUIRE (guided_mode == Guided_TakeOff);
+	wp_nav.waypopint_destination_is_reached = true;
+	guided_run ();
+	REQUIRE (guided_mode == Guided_WP);
+}
+
