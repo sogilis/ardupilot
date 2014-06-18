@@ -177,11 +177,12 @@ static Control_Auto_Stub control_auto_stub;
 
 class Take_Off_Stub {
 public:
-	bool has_been_called;
-	AP_Mission::Mission_Command cmd;
+	bool guided_takeoff_start_has_been_called;
+	float altitude;
 	uint8_t mode;
 };//Take_Off_Stub
 static Take_Off_Stub take_Off_Stub;
+
 
 static union {
     struct {
@@ -237,6 +238,13 @@ bool set_mode(uint8_t mode) {
 }//set_mode
 
 
+static void guided_takeoff_start(float alt) {
+	take_Off_Stub.guided_takeoff_start_has_been_called = true;
+	take_Off_Stub.altitude = alt;
+}
+
+
+
 class Fixture {
 
 public:
@@ -251,6 +259,7 @@ TEST_CASE("Speed Invalid Case", "COMMAND_LONG | DO_CHANGE_SPEED") {
 	Fixture fixture;
 	guided_mode = Guided_WP;
 	fixture.exercize(3.0);
-	REQUIRE (guided_mode == Guided_TakeOff);
+	REQUIRE (take_Off_Stub.guided_takeoff_start_has_been_called);
+	REQUIRE (take_Off_Stub.altitude == 3.0);
 }
 
