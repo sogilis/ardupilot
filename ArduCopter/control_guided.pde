@@ -98,5 +98,6 @@ static void guided_run()
     
     
 static void guided_takeoff_start (float final_alt) {
-    auto_takeoff_start(final_alt);
+    guided_mode = Guided_TakeOff;
+    auto_takeoff_start_factor(final_alt);
 }
