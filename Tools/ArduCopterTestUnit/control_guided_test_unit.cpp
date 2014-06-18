@@ -245,9 +245,6 @@ static void set_auto_yaw_look_at_heading(float angle_deg, float turn_rate_dps, u
 	control_auto_stub.relative_angle = relative_angle;
 }//set_auto_yaw_look_at_heading
 
-
-Fixture fixture;
-
 TEST_CASE("Guided Take Off Setup", "Take Off - Setup in guided mode") {
 	guided_mode = Guided_WP;
 	guided_takeoff_start(3.0);
