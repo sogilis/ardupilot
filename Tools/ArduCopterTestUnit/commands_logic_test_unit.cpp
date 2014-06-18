@@ -92,7 +92,6 @@ uint8_t get_default_auto_yaw_mode(bool rtl) {} ;
 static void Log_Write_Camera() {} ;
 static void auto_spline_start(const Vector3f& destination, bool stopped_at_start, AC_WPNav::spline_segment_end_type seg_end_type, const Vector3f& next_destination) {}
 static void do_takeoff(const AP_Mission::Mission_Command& cmd);
-
 // Variables Stubs
 
 static AP_Motors motors;
