@@ -164,6 +164,9 @@ enum GuidedMode {
     Guided_WP
 };
 
+static GuidedMode guided_mode;
+
+
 class Control_Auto_Stub {
 public:
 	float   angle_deg;      // target angle in degrees (0=north, 90=east)
