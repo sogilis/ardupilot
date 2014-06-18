@@ -246,39 +246,18 @@ static void set_auto_yaw_look_at_heading(float angle_deg, float turn_rate_dps, u
 }//set_auto_yaw_look_at_heading
 
 
-class Fixture {
-
-public:
-
-	void exercize_run () {
-		guided_run ();
-	}
-
-	void check_run () {
-		REQUIRE (take_Off_Stub.auto_takeoff_run_has_been_called);
-	}
-
-	void exercize_setup (float altitude) {
-		guided_takeoff_start (altitude);
-	}
-
-	void check_setup () {
-		REQUIRE (guided_mode == Guided_TakeOff);
-	}
-};
-
 Fixture fixture;
 
 TEST_CASE("Guided Take Off Setup", "Take Off - Setup in guided mode") {
 	guided_mode = Guided_WP;
-	fixture.exercize_setup(3.0);
-	fixture.check_setup ();
+	guided_takeoff_start(3.0);
+	REQUIRE (guided_mode == Guided_TakeOff);
 
 }
 
 TEST_CASE("Guided Take Off Run", "Take Off - Run in guided mode") {
 	guided_mode = Guided_TakeOff;
-	fixture.exercize_run();
-	fixture.check_run ();
+	guided_run ();
+	REQUIRE (take_Off_Stub.auto_takeoff_run_has_been_called);
 }
 
