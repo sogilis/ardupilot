@@ -270,6 +270,7 @@ TEST_CASE("Guided Take Off Stop", "Take Off - End") {
 
 TEST_CASE("Guided Point Rejected During Take Off", "Take Off - End") {
 	guided_mode = Guided_TakeOff;
+	control_mode = GUIDED;
 	Vector3f wp_to_test;
 	wp_nav.targetPos.x = 0.0;
 	wp_nav.targetPos.y = 0.0;
