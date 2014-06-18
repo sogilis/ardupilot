@@ -268,3 +268,12 @@ TEST_CASE("Guided Take Off Stop", "Take Off - End") {
 	REQUIRE (guided_mode == Guided_WP);
 }
 
+TEST_CASE("Guided Point Rejected During Take Off", "Take Off - End") {
+	guided_mode = Guided_TakeOff;
+	wp_nav.targetPos = (0.0, 0.0, 0.0);
+	guided_set_destination ((1.0, 1.0, 1.0));
+	REQUIRE (wp_nav.targetPos.x == 0.0);
+	REQUIRE (wp_nav.targetPos.y == 0.0);
+	REQUIRE (wp_nav.targetPos.z == 0.0);
+}
+
