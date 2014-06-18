@@ -181,6 +181,7 @@ public:
 	bool auto_takeoff_run_has_been_called;
 	bool auto_takeoff_start_has_been_called;
 	float altitude_setup;
+	uint8_t mode;
 };//Take_Off_Stub
 
 static Take_Off_Stub take_Off_Stub;
@@ -253,7 +254,7 @@ public:
 	}
 
 	void check_run () {
-		REQUIRE (take_Off_Stub.auto_takeoff_run_has_been_called);
+		REQUIRE (take_Off_Stub.mode == Guided_TakeOff);
 	}
 
 	void exercize_setup (float altitude) {
@@ -275,7 +276,7 @@ TEST_CASE("Guided Take Off Setup", "Take Off - Setup in guided mode") {
 }
 
 TEST_CASE("Guided Take Off Run", "Take Off - Run in guided mode") {
-	guided_mode = Guided_TakeOff;
+	guided_mode = Guided_WP;
 	fixture.exercize_run();
 	fixture.check_run ();
 }
