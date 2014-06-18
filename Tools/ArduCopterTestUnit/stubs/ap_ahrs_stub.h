@@ -18,7 +18,11 @@ public:
     float get_error_rp(void) {return 0.0;}
     float get_error_yaw(void) {return 0.0;}
     void  set_trim(Vector3f new_trim) {}
+    void set_home(const Location &loc) {}
+
     const struct Location &get_home(void) const {return _home;}
+
+
 
 };//AP_AHRS
 
