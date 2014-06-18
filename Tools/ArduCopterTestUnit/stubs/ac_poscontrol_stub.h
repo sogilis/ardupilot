@@ -11,6 +11,7 @@
 class AC_PosControl {
 public:
 	float get_alt_error () {return 0.1;}
+	void update_z_controller() {}
 };//AC_PosControl
 
 #endif /* AC_POSCONTROL_STUB_H_ */
