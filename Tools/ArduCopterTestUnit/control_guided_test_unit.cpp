@@ -254,7 +254,7 @@ public:
 	}
 
 	void check_run () {
-		REQUIRE (take_Off_Stub.mode == Guided_TakeOff);
+		REQUIRE (guided_mode == Guided_TakeOff);
 	}
 
 	void exercize_setup (float altitude) {
