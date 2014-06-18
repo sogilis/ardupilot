@@ -3,6 +3,7 @@
 // forward declarations to make compiler happy
 static void do_nav_wp(const AP_Mission::Mission_Command& cmd);
 static void do_land(const AP_Mission::Mission_Command& cmd);
+static void do_takeoff(const AP_Mission::Mission_Command& cmd);
 static void do_loiter_unlimited(const AP_Mission::Mission_Command& cmd);
 static void do_circle(const AP_Mission::Mission_Command& cmd);
 static void do_loiter_time(const AP_Mission::Mission_Command& cmd);
