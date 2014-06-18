@@ -17,8 +17,8 @@ testdir=os.path.dirname(os.path.realpath(__file__))
 
 FRAME='+'
 TARGET='sitl'
-HOME=mavutil.location(-35.362938,149.165085,584,270)
-AVCHOME=mavutil.location(40.072842,-105.230575,1586,0)
+HOME=mavutil.location(45.2227,5.6897027778,10,270)
+AVCHOME=mavutil.location(45.2227,5.6897027778,10,270)
 
 homeloc = None
 num_wp = 0
@@ -46,6 +46,46 @@ def arm_motors(mavproxy, mav):
     mav.motors_armed_wait()
     print("MOTORS ARMED OK")
     return True
+    
+def goto_guided_point(mavproxy, mav, lat, lng, alt, freq):
+    mavproxy.send('guided ' + str(lat) + ' ' + str(lng) + ' ' + str(alt) + '\n')
+    
+    tstart = time.time()
+    while time.time() < tstart + freq:
+        vfr_hud_msg  = mav.recv_match(type='VFR_HUD' , blocking=True)
+        attitude_msg = mav.recv_match(type='ATTITUDE', blocking=True)
+        gps_raw_int_msg = mav.recv_match(type='GPS_RAW_INT', blocking=True)
+        heartbeat_msg = mav.recv_match(type='HEARTBEAT', blocking=True)
+        
+        #print("Current Altitude: Cur:%u " % (m.alt))
+        print("Current airspeed: Cur:%u " % (vfr_hud_msg.airspeed))
+        target = mavutil.location(lat,lng,alt)
+        drone  = mav.location()
+        #print ("Target " +  str(target));
+        #print ("Drone " + str(drone)) ;
+        delta = get_distance(target, drone)
+        print("Distance:%u " % (delta))
+        #print("VFR_HUD Message %s" % vfr_hud_msg)
+        #print("ATTITUDE Message %s" % attitude_msg)
+        #print("GPS_RAW_INT Message %s" % gps_raw_int_msg)
+        #print("HEARTBEAT Message %s" % heartbeat_msg)
+    print("GO TO WP OK")
+    return True
+
+def wait(mav, duration):
+    tstart = time.time()
+    while time.time() < tstart + duration:
+        vfr_hud_msg  = mav.recv_match(type='VFR_HUD' , blocking=True)
+        print("Air speed: " + str(vfr_hud_msg.airspeed) + " - Ground speed: "+ str(vfr_hud_msg.groundspeed))
+    return True
+
+def set_guided_mode(mavproxy, mav):
+    print("Switch to GUIDED Mode")
+    mavproxy.send('mode GUIDED\n') # Guided mode
+    wait_mode(mav, 'GUIDED')
+    print("GUIDED MODE OK")
+    return True
+    
 
 def disarm_motors(mavproxy, mav):
     '''disarm motors'''
