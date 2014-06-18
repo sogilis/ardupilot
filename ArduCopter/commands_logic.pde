@@ -277,24 +277,27 @@ static void do_RTL(void)
 //	Nav (Must) commands
 /********************************************************************************/
 
+// takeoff_factor
+static float takeoff_factor(float altitude){
+    // Set wp navigation target to safe altitude above current position
+    float takeoff_alt = altitude;
+    takeoff_alt = max(takeoff_alt,current_loc.alt);
+    takeoff_alt = max(takeoff_alt,100.0f);
+    return takeoff_alt;
+}
+
 // do_takeoff - initiate takeoff navigation command
 static void do_takeoff(const AP_Mission::Mission_Command& cmd)
 {
-    // Set wp navigation target to safe altitude above current position
-    float takeoff_alt = cmd.content.location.alt;
-    takeoff_alt = max(takeoff_alt,current_loc.alt);
-    takeoff_alt = max(takeoff_alt,100.0f);
+    float takeoff_alt = takeoff_factor (cmd.content.location.alt);
     auto_takeoff_start(takeoff_alt);
 }
 
 // do_takeoff_guided - initiate takeoff navigation command
 static void do_takeoff_guided(float altitude)
 {
-    // Set wp navigation target to safe altitude above current position
-    float takeoff_alt = altitude;
-    takeoff_alt = max(takeoff_alt,current_loc.alt);
-    takeoff_alt = max(takeoff_alt,100.0f);
-    auto_takeoff_start(takeoff_alt);
+    float takeoff_alt = takeoff_factor (altitude);
+    guided_takeoff_start(takeoff_alt);
 }
 
 // do_nav_wp - initiate move to next waypoint
