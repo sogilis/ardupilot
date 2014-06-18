@@ -12,6 +12,7 @@ class AC_WPNav {
 public:
 
 	bool waypopint_destination_is_reached;
+	Vector3f targetPos;
 
 	// spline segment end types enum
 	enum spline_segment_end_type {
@@ -28,7 +29,7 @@ public:
 	bool reached_wp_destination() const { return waypopint_destination_is_reached; }
 	const Vector3f &get_wp_destination() const {Vector3f toto; return toto; }
 	void wp_and_spline_init() {};
-	void set_wp_destination(const Vector3f& destination) {};
+	void set_wp_destination(const Vector3f& destination) {targetPos = destination;};
 	void update_wpnav() {};
 	int32_t get_roll() const { return 0; }
 	int32_t get_pitch() const { return 0; };
