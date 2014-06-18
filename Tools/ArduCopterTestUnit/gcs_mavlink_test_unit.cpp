@@ -308,7 +308,7 @@ public:
 		REQUIRE (get_result(6)                    == 0x16);  	     // Check Mav Cmd = 22 (TAKE_OFF)
 		REQUIRE (get_result(7)                    == 0);
 		REQUIRE (get_result(8)                    == status);   	 // Accepted and Executed
-		REQUIRE (take_Off_Stub.cmd.content.location.alt   == 10);   	 // Accepted and Executed
+		REQUIRE (take_Off_Stub.altitude == 10);   	 // Accepted and Executed
 		REQUIRE (take_Off_Stub.has_been_called);
 		REQUIRE (take_Off_Stub.mode == 4);
 	}//check_take_off_test
