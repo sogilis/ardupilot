@@ -70,9 +70,15 @@ public:
 	        uint8_t bytes[12];
 	    };
 	typedef struct MISSION_COMMAND {        // this commands position in the command list
+		uint16_t index;
 		Content content;
+		uint8_t id;                 // mavlink command id
+        uint16_t p1;                // general purpose parameter 1
 	    } Mission_Command;
 	uint16_t get_current_nav_index() const {return 1;}
+	uint16_t get_prev_nav_cmd_index() const { return 1; }
+    bool get_next_nav_cmd(uint16_t start_index, Mission_Command& cmd) {return true;};
+	bool read_cmd_from_storage(uint16_t index, Mission_Command& cmd) {return true;}
 };//AP_Mission
 
 #endif /* AP_MISSION_STUB_H_ */
