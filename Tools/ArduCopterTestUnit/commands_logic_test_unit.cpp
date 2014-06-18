@@ -158,6 +158,12 @@ static uint8_t auto_yaw_mode;
 static Vector3f roi_WP;
 bool rtl_state_complete;
 
+// Guided modes
+enum GuidedMode {
+    Guided_TakeOff,
+    Guided_WP
+};
+
 class Control_Auto_Stub {
 public:
 	float   angle_deg;      // target angle in degrees (0=north, 90=east)
@@ -230,25 +236,18 @@ bool set_mode(uint8_t mode) {
 
 class Fixture {
 
-	mavlink_message_t msg;
-
-	void reset(void) {
-		result_index = 0;
-		int i = 0;
-		for (i = 0; i < 11; i++) {
-			result[i] = 0;
-		}
-	}
-
-	uint8_t get_result(int index) {
-		return result[index];
-	}
-
 public:
+
+	void exercize (float altitude){
+		do_takeoff_guided (altitude);
+	}
 
 };
 
 TEST_CASE("Speed Invalid Case", "COMMAND_LONG | DO_CHANGE_SPEED") {
-	REQUIRE (true);
+	Fixture fixture;
+	guided_mode = Guided_WP;
+	fixture.exercize(3.0);
+	REQUIRE (guided_mode == Guided_TakeOff);
 }
 
