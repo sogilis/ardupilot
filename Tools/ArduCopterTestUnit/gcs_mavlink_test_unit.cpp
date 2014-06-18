@@ -112,7 +112,7 @@ static Control_Auto_Stub control_auto_stub;
 class Take_Off_Stub {
 public:
 	bool has_been_called;
-	AP_Mission::Mission_Command cmd;
+	float altitude;
 	uint8_t mode;
 };//Take_Off_Stub
 static Take_Off_Stub take_Off_Stub;
@@ -165,9 +165,9 @@ static void set_auto_yaw_look_at_heading(float angle_deg, float turn_rate_dps, u
 	control_auto_stub.relative_angle = relative_angle;
 }//set_auto_yaw_look_at_heading
 
-static void do_takeoff(const AP_Mission::Mission_Command& cmd) {
+static void do_takeoff_guided(float altitude) {
 	take_Off_Stub.has_been_called = true;
-	take_Off_Stub.cmd = cmd;
+	take_Off_Stub.altitude = altitude;
 }//do_takeoff
 
 bool set_mode(uint8_t mode) {
