@@ -11,6 +11,8 @@
 class AC_WPNav {
 public:
 
+	bool waypopint_destination_is_reached;
+
 	// spline segment end types enum
 	enum spline_segment_end_type {
 	    SEGMENT_END_STOP = 0,
@@ -23,7 +25,7 @@ public:
 	void set_speed_xy(float speed_cms) {speed_in_cms = speed_cms;}
 	void set_fast_waypoint(bool fast) {}
 	void get_wp_stopping_point_xy(Vector3f& stopping_point) {}
-	bool reached_wp_destination() const { return true; }
+	bool reached_wp_destination() const { return waypopint_destination_is_reached; }
 	const Vector3f &get_wp_destination() const {Vector3f toto; return toto; }
 	void wp_and_spline_init() {};
 	void set_wp_destination(const Vector3f& destination) {};
