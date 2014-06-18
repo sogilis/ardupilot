@@ -184,6 +184,12 @@ enum AutoMode {
     Auto_Spline
 };
 
+// Guided modes
+enum GuidedMode {
+    Guided_TakeOff,
+    Guided_WP
+};
+
 // RTL states
 enum RTLState {
     InitialClimb,
