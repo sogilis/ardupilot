@@ -277,7 +277,7 @@ TEST_CASE("Guided Point Rejected During Take Off", "Take Off - End") {
 	wp_to_test.x = 1.0;
 	wp_to_test.y = 1.0;
 	wp_to_test.z = 1.0;
-	guided_set_destination (&wp_to_test);
+	guided_set_destination (wp_to_test);
 	REQUIRE (wp_nav.targetPos.x == 0.0);
 	REQUIRE (wp_nav.targetPos.y == 0.0);
 	REQUIRE (wp_nav.targetPos.z == 0.0);
