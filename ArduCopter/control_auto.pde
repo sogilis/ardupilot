@@ -73,10 +73,7 @@ static void auto_run()
     }
 }
 
-// auto_takeoff_start - initialises waypoint controller to implement take-off
-static void auto_takeoff_start(float final_alt)
-{
-    auto_mode = Auto_TakeOff;
+static void auto_takeoff_start_factor(float final_alt) {
 
     // initialise wpnav destination
     Vector3f target_pos = inertial_nav.get_position();
@@ -88,6 +85,14 @@ static void auto_takeoff_start(float final_alt)
 
     // tell motors to do a slow start
     motors.slow_start(true);
+
+}
+
+// auto_takeoff_start - initialises waypoint controller to implement take-off
+static void auto_takeoff_start(float final_alt)
+{
+    auto_mode = Auto_TakeOff;
+    auto_takeoff_start_factor (final_alt);
 }
 
 // auto_takeoff_run - takeoff in auto mode
