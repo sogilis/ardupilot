@@ -255,29 +255,29 @@ public:
 	}
 
 	void check_run () {
-		REQUIRE (guided_mode == Guided_TakeOff);
+		REQUIRE (take_Off_Stub.auto_takeoff_run_has_been_called);
 	}
 
 	void exercize_setup (float altitude) {
 		guided_takeoff_start (altitude);
 	}
 
-	void check_setup (float altitude) {
-		REQUIRE (take_Off_Stub.auto_takeoff_start_has_been_called);
-		REQUIRE (take_Off_Stub.altitude_setup == altitude);
+	void check_setup () {
+		REQUIRE (guided_mode == Guided_TakeOff);
 	}
 };
 
 Fixture fixture;
 
 TEST_CASE("Guided Take Off Setup", "Take Off - Setup in guided mode") {
+	guided_mode = Guided_WP;
 	fixture.exercize_setup(3.0);
-	fixture.check_setup (3.0);
+	fixture.check_setup ();
 
 }
 
 TEST_CASE("Guided Take Off Run", "Take Off - Run in guided mode") {
-	guided_mode = Guided_WP;
+	guided_mode = Guided_TakeOff;
 	fixture.exercize_run();
 	fixture.check_run ();
 }
