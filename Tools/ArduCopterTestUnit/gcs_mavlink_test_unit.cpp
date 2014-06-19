@@ -400,6 +400,6 @@ TEST_CASE("Take Off", "COMMAND_LONG | TAKE_OFF") {
 	take_Off_Stub.mode = 0;
 	fixture.setup_take_off_test(8.0);
 	fixture.exercize();
-	fixture.check_take_off_test(0, 8.0);	// Command is accepted and executed - Take Off is started
+	fixture.check_take_off_test(0, 800.0);	// Command is accepted and executed - Take Off is started
 }
 
