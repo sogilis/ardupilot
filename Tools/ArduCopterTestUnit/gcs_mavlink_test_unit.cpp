@@ -258,7 +258,7 @@ public:
 
 	}//setup_yaw_test
 
-	void setup_take_off_test () {
+	void setup_take_off_test (float param7) {
 		reset();
 		uint16_t unused_checksum = 0;
 		uint8_t  unused_protocol_magic = 0;
@@ -278,6 +278,9 @@ public:
 				command_long_msg_ig, {}
 		};
 		uint8_t* payload_ptr = (uint8_t*) msg.payload64;
+		float* param;
+		param = (float*)&payload_ptr[PARAM7_OFFSET];
+		*param = param7;
 		payload_ptr [28] = 0x16;    // Command = 22  for TAKEOFF
 		payload_ptr [29] = 0x00;
 		// Parameters
@@ -308,7 +311,7 @@ public:
 		REQUIRE (get_result(6)                    == 0x16);  	     // Check Mav Cmd = 22 (TAKE_OFF)
 		REQUIRE (get_result(7)                    == 0);
 		REQUIRE (get_result(8)                    == status);   	 // Accepted and Executed
-		REQUIRE (take_Off_Stub.altitude == 10);   	 // Accepted and Executed
+		REQUIRE (take_Off_Stub.altitude == altitude);   	 // Accepted and Executed
 		REQUIRE (take_Off_Stub.has_been_called);
 		REQUIRE (take_Off_Stub.mode == 4);
 	}//check_take_off_test
@@ -395,8 +398,8 @@ TEST_CASE("Take Off", "COMMAND_LONG | TAKE_OFF") {
 	Fixture fixture;
 	take_Off_Stub.has_been_called = false;
 	take_Off_Stub.mode = 0;
-	fixture.setup_take_off_test();
+	fixture.setup_take_off_test(8.0);
 	fixture.exercize();
-	fixture.check_take_off_test(0, 10);	// Command is accepted and executed - Take Off is started
+	fixture.check_take_off_test(0, 8.0);	// Command is accepted and executed - Take Off is started
 }
 
