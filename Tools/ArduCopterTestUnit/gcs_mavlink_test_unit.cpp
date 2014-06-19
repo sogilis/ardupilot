@@ -396,10 +396,23 @@ TEST_CASE("Yaw Error Case (Angle mode neither absolute nor relative)", "COMMAND_
 
 TEST_CASE("Take Off", "COMMAND_LONG | TAKE_OFF") {
 	Fixture fixture;
+	control_mode = GUIDED;
 	take_Off_Stub.has_been_called = false;
 	take_Off_Stub.mode = 0;
+	take_Off_Stub.altitude = 0.0;
 	fixture.setup_take_off_test(8.0);
 	fixture.exercize();
 	fixture.check_take_off_test(0, 800.0);	// Command is accepted and executed - Take Off is started
+}
+
+TEST_CASE("Take Off not in Guided", "COMMAND_LONG | TAKE_OFF") {
+	Fixture fixture;
+	control_mode = LOITER;
+	take_Off_Stub.has_been_called = false;
+	take_Off_Stub.mode = 0;
+	take_Off_Stub.altitude = 0.0;
+	fixture.setup_take_off_test(8.0);
+	fixture.exercize();
+	fixture.check_take_off_test(4, 0.0);	// Command is rejected
 }
 
