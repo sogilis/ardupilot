@@ -1100,9 +1100,11 @@ void GCS_MAVLINK::handleMessage(mavlink_message_t* msg)
             break;
 
         case MAV_CMD_NAV_TAKEOFF:            
-            if (set_mode(GUIDED)) {  
+            if (control_mode == GUIDED) {  
                 do_takeoff_guided(packet.param7 * 100);
                 result = MAV_RESULT_ACCEPTED;
+            } else {
+                result = MAV_RESULT_FAILED;
             }
             break;
 
