@@ -307,13 +307,13 @@ public:
 		REQUIRE (control_auto_stub.relative_angle == relative_angle);
 	}//check_speed_test
 
-	void check_take_off_test (uint8_t status, float altitude) {
+	void check_take_off_test (uint8_t status, float altitude, bool takeoff_called, uint8_t expected_mode) {
 		REQUIRE (get_result(6)                    == 0x16);  	     // Check Mav Cmd = 22 (TAKE_OFF)
 		REQUIRE (get_result(7)                    == 0);
 		REQUIRE (get_result(8)                    == status);   	 // Accepted and Executed
 		REQUIRE (take_Off_Stub.altitude == altitude);   	 // Accepted and Executed
-		REQUIRE (take_Off_Stub.has_been_called);
-		REQUIRE (take_Off_Stub.mode == 4);
+		REQUIRE (take_Off_Stub.has_been_called == takeoff_called);
+		REQUIRE (control_mode == expected_mode);
 	}//check_take_off_test
 };
 
@@ -402,7 +402,7 @@ TEST_CASE("Take Off", "COMMAND_LONG | TAKE_OFF") {
 	take_Off_Stub.altitude = 0.0;
 	fixture.setup_take_off_test(8.0);
 	fixture.exercize();
-	fixture.check_take_off_test(0, 800.0);	// Command is accepted and executed - Take Off is started
+	fixture.check_take_off_test(0, 800.0, true, GUIDED);	// Command is accepted and executed - Take Off is started
 }
 
 TEST_CASE("Take Off not in Guided", "COMMAND_LONG | TAKE_OFF") {
@@ -413,6 +413,6 @@ TEST_CASE("Take Off not in Guided", "COMMAND_LONG | TAKE_OFF") {
 	take_Off_Stub.altitude = 0.0;
 	fixture.setup_take_off_test(8.0);
 	fixture.exercize();
-	fixture.check_take_off_test(4, 0.0);	// Command is rejected
+	fixture.check_take_off_test(4, 0.0, false, LOITER);	// Command is rejected
 }
 
