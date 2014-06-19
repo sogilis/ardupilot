@@ -28,6 +28,7 @@ tests = [
     'change_speed2',
     'change_yaw',
     'change_yaw2',
+    'auto_takeoff',
     ]
 
 
@@ -146,6 +147,10 @@ try:
         if "change_yaw2" in matched :
             res = tests_sogilis.change_yaw2(mavproxy,mav)
             display("change yaw (2 yaws)", res)
+
+        if "auto_takeoff" in matched :
+            res = tests_sogilis.auto_takeoff(mavproxy,mav)
+            display("auto takeoff", res)
 
 except pexpect.TIMEOUT, failed_test_msg:
         failed_test_msg = "Timeout"

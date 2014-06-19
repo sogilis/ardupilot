@@ -269,4 +269,34 @@ def change_yaw2 (mavproxy, mav):
                 
     return result
 
+def auto_takeoff (mavproxy, mav):
+    result = True
+    target_altitude = 20
+    alt_min = 18
+    alt_max = 22
+    
+    if ( 
+        arducopter.calibrate_level(mavproxy, mav) and
+        arducopter.arm_motors(mavproxy, mav) and  
+        arducopter.set_guided_mode(mavproxy,mav)):
+            
+            mavproxy.send('rc 3 1200' + '\n')
+            mavproxy.send('mode guided ' + '\n')
+            mavproxy.send('takeoff ' + str(target_altitude) + '\n')
+            
+            tstart = time.time()
+            print("\nWait 20s for rotation")
+            while time.time() < tstart + 20:
+                vfr_hud_msg  = mav.recv_match(type='VFR_HUD' , blocking=True)
+                print("Altitude: " + str(vfr_hud_msg.alt))
+            
+            tstart = time.time()
+            print("\nCheck altitude between " + str(alt_min) + " and " + str(alt_max) + " during 20s\n")
+            while time.time() < tstart + 20:
+                vfr_hud_msg  = mav.recv_match(type='VFR_HUD' , blocking=True)
+                result = result and (vfr_hud_msg.alt < alt_max) and (vfr_hud_msg.alt > alt_min)
+                print("Altitude: " + str(vfr_hud_msg.alt))
+                
+    return result
+
 
