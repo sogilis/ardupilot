@@ -274,6 +274,10 @@ def auto_takeoff (mavproxy, mav):
     target_altitude = 20
     alt_min = 18
     alt_max = 22
+    lat_min = 45223137
+    lat_max = 45223139
+    lon_min = 5689623
+    lon_max = 5689625
     
     if ( 
         arducopter.calibrate_level(mavproxy, mav) and
@@ -295,7 +299,22 @@ def auto_takeoff (mavproxy, mav):
                 vfr_hud_msg  = mav.recv_match(type='VFR_HUD' , blocking=True)
                 result = result and (vfr_hud_msg.alt < alt_max) and (vfr_hud_msg.alt > alt_min)
                 print("Altitude: " + str(vfr_hud_msg.alt))
+
+            mavproxy.send('guided ' + str(45.223138) + ' ' + str(5.689624) + ' ' + str(20) + '\n')
                 
+            tstart = time.time()
+            print("\nWait 20s for move\n")
+            while time.time() < tstart + 20:
+                pos  = mav.recv_match(type='GLOBAL_POSITION_INT' , blocking=True)
+                print("Lat: " + str(pos.lat) + " Lon : " + str(pos.lon));
+
+            tstart = time.time()
+            print("\nCheck Pos is between (" + str(lat_min) +", " + str(lat_max) + ") and (" + str(lon_min) + ", " + str(lon_max) + ")\n")
+            while time.time() < tstart + 20:
+                pos  = mav.recv_match(type='GLOBAL_POSITION_INT' , blocking=True)
+                print("Lat: " + str(pos.lat) + " Lon : " + str(pos.lon));
+                resutl = result and (pos.lat < lat_max) and (pos.lat > lat_min) and (pos.lon < lon_max) and (pos.lon > lon_min)
+
     return result
 
 
