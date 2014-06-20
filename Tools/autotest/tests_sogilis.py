@@ -280,7 +280,6 @@ def auto_takeoff (mavproxy, mav):
         arducopter.arm_motors(mavproxy, mav) and  
         arducopter.set_guided_mode(mavproxy,mav)):
             
-            mavproxy.send('rc 3 1200' + '\n')
             mavproxy.send('mode guided ' + '\n')
             mavproxy.send('takeoff ' + str(target_altitude) + '\n')
             
