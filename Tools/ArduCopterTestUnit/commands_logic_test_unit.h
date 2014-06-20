@@ -78,42 +78,14 @@
 #define HYBRID      16                  // hybrid - position hold with manual override
 #define NUM_MODES   17
 
-// Channel definition
-#define CH_1 0
-#define CH_2 1
-#define CH_3 2
-#define CH_4 3
-#define CH_5 4
-#define CH_6 5
-#define CH_7 6
-#define CH_8 7
-#define CH_9 8
-#define CH_10 9
-#define CH_11 10
-#define CH_12 11
-#define CH_13 12
-#define CH_14 13
-#define CH_15 14
-#define CH_16 15
-#define CH_17 16
-#define CH_18 17
-
-#define AP_MAX_NAME_SIZE 16
-#define PROGMEM
-#define AP_GROUPEND
-#define AP_GROUPINFO(name, idx, class, element, def) {'a'}
-
-#define MASK_LOG_CMD                    (1<<8)
-
+#define MASK_LOG_CAMERA                 (1<<15)
+#define AUTO_YAW_ROI                    2
+#define AUTO_YAW_LOOK_AT_HEADING        3
 #define LAND_STATE_FLY_TO_LOCATION  0
 #define LAND_STATE_DESCENDING       1
-
-#define AP_MISSION_CMD_INDEX_NONE           65535
 #define DATA_PARACHUTE_DISABLED         49
 #define DATA_PARACHUTE_ENABLED          50
-#define AUTO_YAW_SLEW_RATE    60
-#define AUTO_YAW_LOOK_AT_HEADING        3
-#define AUTO_YAW_ROI                    2
-#define MASK_LOG_CAMERA                 (1<<15)
+#define AP_MISSION_CMD_INDEX_NONE           65535
+#define MASK_LOG_CMD                    (1<<8)
 
 #endif /* COMMANDS_LOGIC_TEST_UNIT_H_ */

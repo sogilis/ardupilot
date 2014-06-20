@@ -394,7 +394,7 @@ TEST_CASE("Yaw Error Case (Angle mode neither absolute nor relative)", "COMMAND_
 	fixture.check_yaw_test(4, 0, 0, 255);	// Command failed - Yaw value remains unchanged
 }
 
-TEST_CASE("Take Off", "COMMAND_LONG | TAKE_OFF") {
+TEST_CASE("Take Off in GUIDED", "COMMAND_LONG | TAKE_OFF") {
 	Fixture fixture;
 	control_mode = GUIDED;
 	take_Off_Stub.has_been_called = false;
