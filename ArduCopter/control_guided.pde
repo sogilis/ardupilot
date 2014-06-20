@@ -54,23 +54,13 @@ static void guided_run()
     switch (guided_mode) {
 
     case Guided_TakeOff:
-        auto_takeoff_run();
+        auto_takeoff_run_factor();
         if (wp_nav.reached_wp_destination()) {
             guided_mode = Guided_WP;
         }
         break;
         
     default:
-    
-        // if not auto armed set throttle to zero and exit immediately
-        if(!ap.auto_armed) {
-            // To-Do: reset waypoint controller?
-            attitude_control.relax_bf_rate_controller();
-            attitude_control.set_yaw_target_to_current_heading();
-            attitude_control.set_throttle_out(0, false);
-            // To-Do: handle take-offs - these may not only be immediately after auto_armed becomes true
-            return;
-        }
 
         // process pilot's yaw input
         float target_yaw_rate = 0;
