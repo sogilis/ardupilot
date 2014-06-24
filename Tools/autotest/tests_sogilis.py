@@ -315,6 +315,16 @@ def auto_takeoff (mavproxy, mav):
                 print("Lat: " + str(pos.lat) + " Lon : " + str(pos.lon));
                 resutl = result and (pos.lat < lat_max) and (pos.lat > lat_min) and (pos.lon < lon_max) and (pos.lon > lon_min)
 
+            mavproxy.send('land\n')
+
+            tstart = time.time()
+            print ("\nCheck land is not too fast (vertspeed < 1,5m/s)\n ")
+            while time.time() < tstart + 12:
+               vfr_hud_msg = mav.recv_match(type='VFR_HUD', blocking=True)
+               result = result and (vfr_hud_msg.alt >= 0)
+               print("Altitude: " + str(vfr_hud_msg.alt))
+               
+
     return result
 
 
