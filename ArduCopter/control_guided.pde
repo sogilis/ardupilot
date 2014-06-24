@@ -58,10 +58,14 @@ static void guided_run()
         if (wp_nav.reached_wp_destination()) {
             guided_mode = Guided_WP;
         }
+        set_land_complete (false);
+        set_auto_armed (true);
         break;
         
     default:
 
+        set_land_complete (false);
+        set_auto_armed (true);
         // process pilot's yaw input
         float target_yaw_rate = 0;
         if (!failsafe.radio) {
