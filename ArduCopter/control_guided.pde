@@ -50,10 +50,10 @@ static void guided_set_destination(const Vector3f& destination)
 // should be called at 100hz or more
 static void guided_run()
 {
+   set_land_complete (false);
+   set_auto_armed (true);
 // call the correct auto controller
     switch (guided_mode) {
-        set_land_complete (false);
-        set_auto_armed (true);
 
     case Guided_TakeOff:
         auto_takeoff_run_factor();
